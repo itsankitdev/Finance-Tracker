@@ -23,4 +23,29 @@ router.get("/", async (req, res) => {
   }
 });
 
+// DELETE expense
+router.delete("/:id", async (req, res) => {
+  try {
+    await Expense.findByIdAndDelete(req.params.id);
+    res.json({ message: "Expense deleted" });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// UPDATE expense
+router.put("/:id", async (req, res) => {
+  try {
+    const updated = await Expense.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
 module.exports = router;
