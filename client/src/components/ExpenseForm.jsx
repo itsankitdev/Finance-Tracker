@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { DollarSign, Tag, FileText } from "lucide-react";
 
-export default function ExpenseForm({ onAdd }) {
+export default function ExpenseForm({ onAdd, isLoggedIn }) {
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("Food");
@@ -30,12 +30,9 @@ export default function ExpenseForm({ onAdd }) {
       animate={{ opacity: 1, y: 0 }}
       className="bg-white p-5 rounded-2xl shadow-md mb-6"
     >
-      <h2 className="text-lg font-semibold mb-4 text-gray-700">
-        Add Expense
-      </h2>
+      <h2 className="text-lg font-semibold mb-4 text-gray-700">Add Expense</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-
         {/* Title */}
         <div className="relative">
           <FileText
@@ -89,11 +86,10 @@ export default function ExpenseForm({ onAdd }) {
           whileTap={{ scale: 0.95 }}
           whileHover={{ scale: 1.03 }}
           type="submit"
-          className="bg-gradient-to-r from-green-600 to-green-500 text-white rounded-lg py-2 font-medium shadow hover:shadow-lg transition"
+          className="bg-green-600 text-white rounded-lg py-2"
         >
           Add Expense
         </motion.button>
-
       </div>
     </motion.form>
   );

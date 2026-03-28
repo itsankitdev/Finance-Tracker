@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { login } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 
@@ -23,6 +23,15 @@ export default function Login() {
       alert("Invalid credentials");
     }
   };
+
+
+useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    window.location.href = "/";
+  }
+}, []);
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-green-50">

@@ -9,44 +9,54 @@ import {
 } from "recharts";
 
 export default function MonthlyChart({ expenses }) {
-  const monthMap = {};
+  const dayMap = {};
 
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  // ✅ filter only current month data
   expenses.forEach((e) => {
-    const date = new Date(e.id);
-    const month = date.toLocaleString("default", { month: "short" });
+  const date = new Date(e.date); // ✅ correct field
 
-    if (!monthMap[month]) monthMap[month] = 0;
-    monthMap[month] += e.amount;
-  });
+  if (isNaN(date)) return;
 
-  const data = Object.keys(monthMap).map((m) => ({
-    month: m,
-    total: monthMap[m],
-  }));
+  const day = date.getDate();
 
-  // 🔴 Important check
- if (data.length < 2) {
-  return (
-    <div className="bg-white p-4 rounded-2xl shadow">
-      <p className="text-gray-500">
-        Add more data to see monthly trends
-      </p>
-    </div>
-  );
-}
+  if (!dayMap[day]) dayMap[day] = 0;
+  dayMap[day] += e.amount;
+});
 
+
+  const data = Object.keys(dayMap)
+    .sort((a, b) => a - b) // ✅ important for correct order
+    .map((d) => ({
+      day: d,
+      total: dayMap[d],
+    }));
+
+  // 🔴 if not enough data
+  if (data.length < 1) {
+    return (
+      <div className="bg-white p-4 rounded-2xl shadow">
+        <p className="text-gray-500">
+          Add more data to see daily trends
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white p-4 rounded-2xl shadow">
       <h2 className="text-lg font-bold mb-3">
-        Monthly Trend
+        Daily Trend (This Month)
       </h2>
 
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
 
-          <XAxis dataKey="month" />
+          <XAxis dataKey="day" />
           <YAxis />
           <Tooltip />
 
@@ -55,7 +65,7 @@ export default function MonthlyChart({ expenses }) {
             dataKey="total"
             stroke="#16a34a"
             strokeWidth={3}
-            dot={{ r: 5, fill: "#22c55e" }}
+            dot={{ r: 5 }}
             activeDot={{ r: 7 }}
           />
         </LineChart>
