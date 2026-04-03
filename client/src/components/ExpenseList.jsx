@@ -13,20 +13,18 @@ export default function ExpenseList({ expenses, onDelete, onEdit }) {
         boxShadow: "0 8px 32px rgba(109,40,217,0.07)",
       }}
     >
-      <h2 className="text-base font-bold text-violet-700 mb-4 tracking-wide">
+      <h2 className="text-base font-bold mb-4 tracking-wide" style={{ color: "#4c1d95" }}>
         Recent Transactions
       </h2>
 
       {expenses.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 text-center">
-          <div
-            className="p-4 rounded-2xl mb-3"
-            style={{ background: "rgba(139,92,246,0.08)" }}
-          >
-            <ReceiptText size={36} className="text-violet-300" />
+          <div className="p-4 rounded-2xl mb-3" style={{ background: "rgba(139,92,246,0.08)" }}>
+            <ReceiptText size={36} className="text-violet-400" />
           </div>
-          <p className="text-violet-400 font-medium text-sm">No expenses yet</p>
-          <p className="text-violet-300 text-xs mt-1">Add your first expense above!</p>
+          {/* ✅ darker empty state text */}
+          <p className="font-semibold text-sm" style={{ color: "#5b21b6" }}>No expenses yet</p>
+          <p className="text-xs mt-1" style={{ color: "#6d28d9" }}>Add your first expense above!</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -45,42 +43,32 @@ export default function ExpenseList({ expenses, onDelete, onEdit }) {
               }}
             >
               <div>
-                <p className="font-semibold text-gray-800 text-sm">{e.title}</p>
+                {/* ✅ dark title */}
+                <p className="font-bold text-sm" style={{ color: "#111827" }}>{e.title}</p>
                 <div className="flex items-center gap-2 mt-0.5">
                   <span
-                    className="text-xs px-2 py-0.5 rounded-full font-medium"
-                    style={{
-                      background: "rgba(139,92,246,0.10)",
-                      color: "#7c3aed",
-                    }}
+                    className="text-xs px-2 py-0.5 rounded-full font-semibold"
+                    style={{ background: "rgba(139,92,246,0.12)", color: "#5b21b6" }}
                   >
                     {e.category}
                   </span>
-                  <span className="text-xs text-gray-400">
+                  {/* ✅ darker date text */}
+                  <span className="text-xs font-medium" style={{ color: "#4b5563" }}>
                     {new Date(e.date).toLocaleDateString("en-IN", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
+                      day: "numeric", month: "short", year: "numeric",
                     })}
                   </span>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
-                <p
-                  className="font-bold text-sm"
-                  style={{ color: "#7c3aed" }}
-                >
-                  ₹{e.amount}
-                </p>
+                {/* ✅ darker amount */}
+                <p className="font-bold text-sm" style={{ color: "#5b21b6" }}>₹{e.amount}</p>
 
                 <button
                   onClick={() => onDelete(e._id)}
                   className="p-1.5 rounded-lg transition-all hover:scale-110"
-                  style={{
-                    background: "rgba(239,68,68,0.08)",
-                    color: "#ef4444",
-                  }}
+                  style={{ background: "rgba(239,68,68,0.10)", color: "#dc2626" }}
                 >
                   <Trash2 size={15} />
                 </button>
@@ -88,10 +76,7 @@ export default function ExpenseList({ expenses, onDelete, onEdit }) {
                 <button
                   onClick={() => onEdit(e)}
                   className="p-1.5 rounded-lg transition-all hover:scale-110"
-                  style={{
-                    background: "rgba(59,130,246,0.08)",
-                    color: "#3b82f6",
-                  }}
+                  style={{ background: "rgba(59,130,246,0.10)", color: "#1d4ed8" }}
                 >
                   <Pencil size={15} />
                 </button>
