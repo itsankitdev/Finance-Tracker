@@ -1,11 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const Expense = require("../models/Expense");
+const auth = require("../middleware/authMiddleware"); // ✅ import middleware
 
-// Create Expense
+// ✅ Apply auth middleware to ALL routes
+router.use(auth);
+
+// Create Expense — attach userId from token
 router.post("/", async (req, res) => {
   try {
-    const expense = new Expense(req.body);
+    const expense = new Expense({
+      ...req.body,
+      userId: req.userId, // ✅ attach logged-in user's ID
+    });
     const saved = await expense.save();
     res.json(saved);
   } catch (err) {
@@ -13,31 +20,35 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get All Expenses
+// Get All Expenses — only for logged-in user
 router.get("/", async (req, res) => {
   try {
-    const expenses = await Expense.find().sort({ date: -1 });
+    const expenses = await Expense.find({ userId: req.userId }) // ✅ filter by user
+      .sort({ date: -1 });
     res.json(expenses);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-// DELETE expense
+// DELETE — only if expense belongs to this user
 router.delete("/:id", async (req, res) => {
   try {
-    await Expense.findByIdAndDelete(req.params.id);
+    await Expense.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.userId, // ✅ security check
+    });
     res.json({ message: "Expense deleted" });
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-// UPDATE expense
+// UPDATE — only if expense belongs to this user
 router.put("/:id", async (req, res) => {
   try {
-    const updated = await Expense.findByIdAndUpdate(
-      req.params.id,
+    const updated = await Expense.findOneAndUpdate(
+      { _id: req.params.id, userId: req.userId }, // ✅ security check
       req.body,
       { new: true }
     );
@@ -46,6 +57,5 @@ router.put("/:id", async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 
 module.exports = router;
