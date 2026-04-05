@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api/auth",
+  baseURL: "https://finance-tracker-aebv.onrender.com/api/auth",
 });
 
 export const register = (data) => API.post("/register", data);
