@@ -102,7 +102,7 @@ cd finance-tracker
 ### 2. Setup Backend
 
 ```bash
-cd server
+cd backend
 npm install
 ```
 
